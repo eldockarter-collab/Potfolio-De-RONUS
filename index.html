@@ -1,450 +1,103 @@
-<!doctype html>
-<html lang="fr">
-    <head>
-        <!-- En-tête du document (informations non visibles sur la page) -->
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Mon Portfolio - [Ronus Eldo TOLIZARA]</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // Smooth scroll navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
 
-        <!-- Styles CSS de base (optionnel mais recommandé pour un rendu plus professionnel) -->
-        <style>
-            /* Réinitialisation des marges par défaut du navigateur */
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('mobileMenu');
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('open');
+        });
+
+        // Form validation
+        document.getElementById('myForm').onsubmit = function() {
+            var name = document.getElementById('name').value;
+            if(name === '') {
+                alert('Name is required');
+                return false;
             }
+            return true;
+        };
 
-            /* Style général du document */
-            body {
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
-                background-color: #f4f4f4;
+        // Scroll animations
+        const scrollElements = document.querySelectorAll('.scroll-animation');
+        const elementInView = (el, className) => {
+            const elementTop = el.getBoundingClientRect().top;
+            const elementBottom = el.getBoundingClientRect().bottom;
+            const viewportTop = 0;
+            const viewportBottom = window.innerHeight;
+            return elementBottom > viewportTop && elementTop < viewportBottom;
+        };
+
+        const displayScrollElement = (element) => {
+            element.classList.add('active');
+        };
+
+        const handleScrollAnimation = () => {
+            scrollElements.forEach((el) => {
+                if (elementInView(el, 'active')) {
+                    displayScrollElement(el);
+                }
+            });
+        };
+
+        window.addEventListener('scroll', () => {
+            handleScrollAnimation();
+        });
+
+        // Theme switcher
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        themeSwitcher.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+
+        // Back-to-top button
+        const backToTopBtn = document.getElementById('backToTop');
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
             }
+        };
 
-            /* Conteneur principal */
-            .container {
-                max-width: 1000px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: white;
-            }
-
-            /* En-tête du site */
-            header {
-                background-color: #2c3e50;
-                color: white;
-                padding: 20px;
-                text-align: center;
-                margin-bottom: 30px;
-                border-radius: 5px;
-            }
-
-            header h1 {
-                margin-bottom: 10px;
-                font-size: 2.5em;
-            }
-
-            header p {
-                font-size: 1.1em;
-                font-style: italic;
-            }
-
-            /* Barre de navigation */
-            nav {
-                background-color: #34495e;
-                padding: 15px;
-                margin-bottom: 30px;
-                border-radius: 5px;
-            }
-
-            nav ul {
-                list-style: none;
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-
-            nav a {
-                color: white;
-                text-decoration: none;
-                font-weight: bold;
-                padding: 10px 15px;
-                border-radius: 3px;
-                transition: background-color 0.3s;
-            }
-
-            nav a:hover {
-                background-color: #2c3e50;
-            }
-
-            /* Sections principales */
-            section {
-                margin-bottom: 40px;
-                padding: 20px;
-                background-color: #ecf0f1;
-                border-left: 5px solid #3498db;
-                border-radius: 5px;
-            }
-
-            section h2 {
-                color: #2c3e50;
-                margin-bottom: 15px;
-                font-size: 1.8em;
-                border-bottom: 2px solid #3498db;
-                padding-bottom: 10px;
-            }
-
-            /* Listes */
-            ul,
-            ol {
-                margin-left: 20px;
-                margin-bottom: 15px;
-            }
-
-            li {
-                margin-bottom: 8px;
-            }
-
-            /* Projet */
-            .projet {
-                background-color: white;
-                padding: 15px;
-                margin-bottom: 15px;
-                border-left: 4px solid #27ae60;
-                border-radius: 3px;
-            }
-
-            .projet h3 {
-                color: #27ae60;
-                margin-bottom: 8px;
-            }
-
-            /* Formulaire de contact */
-            form {
-                max-width: 600px;
-            }
-
-            .form-group {
-                margin-bottom: 15px;
-            }
-
-            label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: bold;
-                color: #2c3e50;
-            }
-
-            input,
-            textarea {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #bdc3c7;
-                border-radius: 3px;
-                font-family: Arial, sans-serif;
-                font-size: 1em;
-            }
-
-            textarea {
-                resize: vertical;
-                min-height: 120px;
-            }
-
-            button {
-                background-color: #3498db;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 3px;
-                font-weight: bold;
-                cursor: pointer;
-                font-size: 1em;
-                transition: background-color 0.3s;
-            }
-
-            button:hover {
-                background-color: #2980b9;
-            }
-
-            /* Pied de page */
-            footer {
-                background-color: #2c3e50;
-                color: white;
-                text-align: center;
-                padding: 20px;
-                margin-top: 30px;
-                border-radius: 5px;
-            }
-
-            footer p {
-                margin: 5px 0;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Conteneur principal -->
-        <div class="container">
-            <!-- EN-TÊTE -->
-            <header>
-                <h1>Mon Portfolio</h1>
-                <p>Découvrez mes projets et mes compétences</p>
-            </header>
-
-            <!-- NAVIGATION -->
-            <nav>
-                <ul>
-                    <li><a href="#accueil">Accueil</a></li>
-                    <li><a href="#apropos">À propos</a></li>
-                    <li><a href="#competences">Compétences</a></li>
-                    <li><a href="#projets">Projets</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-
-            <!-- SECTION ACCUEIL -->
-            <section id="accueil">
-                <h2>Accueil</h2>
-                <p>
-                    Bonjour ! Je m'appelle
-                    <strong>Ronus Eldo Tolizara</strong> et je suis un jeune
-                    développeur en herbe. Je découvre actuellement le monde du
-                    développement web et j'apprends progressivement les
-                    technologies qui le composent. Ce portfolio est mon premier
-                    pas pour présenter mes projets et mes ambitions.
-                </p>
-                <p>
-                    Je suis passionné par la création de sites web, les Hacking
-                    et je travaille dur pour améliorer mes compétences chaque
-                    jour. N'hésitez pas à explorer mon portfolio et à me
-                    contacter si vous souhaitez discuter de mes projets ou
-                    collaborer !
-                </p>
-            </section>
-
-            <!-- SECTION À PROPOS -->
-            <section id="apropos">
-                <h2>À propos de moi</h2>
-                <p>
-                    Je suis un adolescent de 17 ans actuellement en formation
-                    pour devenir développeur web. J'ai commencé par apprendre le
-                    HTML, la base de tout site web, et je compte poursuivre avec
-                    le CSS et le JavaScript pour créer des sites plus
-                    interactifs et esthétiques. Ensuite après l'aquisition de
-                    ces compétence, Je continurais mon apprentissage dans les
-                    langages de programmatios orienteé objet comme(C, C++,
-                    Python,etc).
-                </p>
-                <p>
-                    <strong>Mes objectifs :</strong>
-                </p>
-                <ul>
-                    <li>Maîtriser le HTML et le CSS</li>
-                    <li>Apprendre le JavaScript pour l'interactivité</li>
-                    <li>Créer des sites web modernes et responsifs</li>
-                    <li>
-                        Rejoindre une équipe de développeurs ou lancer mon
-                        propre projet
-                    </li>
-                    <li>Devenir un AS dans le domaine du devloppement Web</li>
-                </ul>
-                <p>
-                    En dehors du développement, j'aime
-                    <strong>[Chanter, Danser]</strong> et j'aime relever des
-                    défis pour progresser dans mes études.
-                </p>
-            </section>
-
-            <!-- SECTION COMPÉTENCES -->
-            <section id="competences">
-                <h2>Mes Compétences</h2>
-                <p>
-                    Voici les technologies et compétences que je maîtrise
-                    actuellement :
-                </p>
-                <ul>
-                    <li>
-                        <strong>HTML 5</strong> - Création de la structure des
-                        pages web
-                    </li>
-                    <li>
-                        <strong>Bases du CSS</strong> - Mise en forme et
-                        présentation (en cours d'apprentissage)
-                    </li>
-                    <li>
-                        <strong>C, C++, Python</strong> - Language Orientée
-                        Objet (Appronfondissement de l'apprentissage)
-                    </li>
-                    <li>
-                        <strong>Utilisation d'outils</strong> - Éditeur de texte
-                        (VS Code et ZED, pas plus.)
-                    </li>
-                    <li>
-                        <strong>Versionning</strong> - Git et GitHub (découverte
-                        récemment)
-                    </li>
-                    <li>
-                        <strong>Compétences transversales</strong> - Résolution
-                        de problèmes, apprentissage autonome, Dynamisme.
-                    </li>
-                </ul>
-                <p>
-                    <em
-                        >Note : Je suis en apprentissage constant et j'ajoute
-                        régulièrement de nouvelles compétences à cette liste.<br />
-                        Et pour certain de ces compétences : Je connais
-                        simplement quelque poignet des fonction et syntaxe.</em
-                    >
-                </p>
-            </section>
-
-            <!-- SECTION PROJETS -->
-            <section id="projets">
-                <h2>Mes Projets</h2>
-                <p>Voici les projets sur lesquels j'ai travaillé :</p>
-
-                <!-- Projet 1 -->
-                <div class="projet">
-                    <h3>📄 Mon Premier Site Web</h3>
-                    <p>
-                        <strong>Description :</strong> Un site web de
-                        présentation simple créé uniquement en HTML.
-                    </p>
-                    <p><strong>Technologie utilisée :</strong> HTML 5</p>
-                    <p><strong>Date :</strong> [Juin/2025]</p>
-                    <p>
-                        <em
-                            >Ce projet m'a permis de comprendre les bases du
-                            HTML et comment structurer une page web avec les
-                            balises essentielles (C'est un projet Noob).</em
-                        >
-                    </p>
-                </div>
-
-                <!-- Projet 2 -->
-                <div class="projet">
-                    <h3>🎨 Résumé Personnel</h3>
-                    <p>
-                        <strong>Description :</strong> Un CV en ligne avec mes
-                        expériences et compétences.
-                    </p>
-                    <p>
-                        <strong>Technologie utilisée :</strong> HTML + CSS de
-                        base
-                    </p>
-                    <p><strong>Date :</strong> [Mars 2026]</p>
-                    <p>
-                        <em
-                            >J'ai amélioré ce projet en ajoutant un peu de CSS
-                            pour rendre le rendu visuel plus attrayant.</em
-                        >
-                    </p>
-                </div>
-
-                <!-- Projet 3 -->
-                <div class="projet">
-                    <h3>🚀 Ce Portfolio</h3>
-                    <p>
-                        <strong>Description :</strong> Mon portfolio complet
-                        pour présenter tous mes projets et compétences.
-                    </p>
-                    <p><strong>Technologie utilisée :</strong> HTML + CSS</p>
-                    <p><strong>Date :</strong> 2026</p>
-                    <p>
-                        <em
-                            >Ce portfolio est mon projet le plus ambitieux à ce
-                            jour. Il me permet de consolider mes connaissances
-                            et de montrer mon évolution.</em
-                        >
-                    </p>
-                </div>
-
-                <p>
-                    <strong>Futur :</strong> Je prévois d'ajouter d'autres
-                    projets à mesure que j'apprendrai de nouvelles technologies.
-                    Restez à l'écoute !
-                </p>
-            </section>
-
-            <!-- SECTION CONTACT -->
-            <section id="contact">
-                <h2>Me Contacter</h2>
-                <p>
-                    Vous aimez mon portfolio ou vous avez une question ?
-                    N'hésitez pas à me contacter via le formulaire ci-dessous ou
-                    directement par email.
-                </p>
-
-                <!-- Formulaire de contact (HTML simple, sans traitement back-end) -->
-                <form
-                    action="mailto:votre.email@example.com"
-                    method="post"
-                    enctype="text/plain"
-                >
-                    <div class="form-group">
-                        <label for="nom">Votre Nom :</label>
-                        <input type="text" id="nom" name="nom" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Votre Email :</label>
-                        <input type="email" id="email" name="email" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sujet">Sujet :</label>
-                        <input type="text" id="sujet" name="sujet" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Message :</label>
-                        <textarea
-                            id="message"
-                            name="message"
-                            required
-                        ></textarea>
-                    </div>
-
-                    <button type="submit">Envoyer le message</button>
-                </form>
-
-                <p style="margin-top: 20px">
-                    <strong>Ou contactez-moi directement :</strong><br />
-                    📧 Email :
-                    <a href="tolizara@protonmail.com">tolizara@protonmail.com</a
-                    ><br />
-                    💼 LinkedIn :
-                    <a
-                        href="https://www.linkedin.com/in/ronus-eldo-284a033ab"
-                        target="_blank"
-                        >Ronus</a
-                    ><br />
-                    🐙 GitHub :
-                    <a href="https://github.com/eldockarter-collab" target="_blank"
-                        >Mon GitHub</a
-                    >
-                </p>
-            </section>
+        backToTopBtn.onclick = function() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        };
+    </script>
+</head>
+<body>
+    <nav>
+        <button id="menuToggle">Toggle Menu</button>
+        <div id="mobileMenu" class="menu">
+            <!-- Menu items -->
         </div>
+    </nav>
 
-        <!-- PIED DE PAGE -->
-        <footer>
-            <p>&copy; 2026 - Mon Portfolio. Tous droits réservés.</p>
-            <p>Créé avec passion par <strong>[Votre Nom]</strong></p>
-            <p>
-                <small>
-                    Dernière mise à jour : <strong>4 Mars 2026</strong> |
-                    Hébergé sur
-                    <a
-                        href="https://github.com"
-                        target="_blank"
-                        style="color: #ecf0f1"
-                        >GitHub</a
-                    >
-                </small>
-            </p>
-        </footer>
-    </body>
+    <form id="myForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="submit" value="Submit">
+    </form>
+
+    <button id="themeSwitcher">Switch Theme</button>
+    <button id="backToTop" style="display:none;">Back to Top</button>
+
+    <div class="scroll-animation">
+        <!-- Content to animate on scroll -->
+    </div>
+</body>
 </html>
